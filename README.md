@@ -51,6 +51,33 @@ $ lima sudo podman --remote info | grep -A2 remoteSocket
     path: /run/podman/podman.sock
 ```
 
+## Root
+
+The system service requires root, for instance `sudo`.
+
+Alternatively, one can use a root-equivalent group:
+
+
+```shell
+groupadd -f -r podman
+
+    mkdir -p /etc/systemd/system/podman.socket.d
+    cat >/etc/systemd/system/podman.socket.d/override.conf <<EOF
+[Socket]
+SocketMode=0660
+SocketUser=root
+SocketGroup=podman
+EOF
+    systemctl daemon-reload
+    echo "d /run/podman 0770 root podman" > /etc/tmpfiles.d/podman.conf
+    systemd-tmpfiles --create
+    systemctl restart podman.socket
+
+usermod -aG podman $SUDO_USER
+```
+
+This is very similar to the "docker" group for docker.
+
 ## Processes
 
 ```text
