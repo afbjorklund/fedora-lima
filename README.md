@@ -55,6 +55,8 @@ $ lima sudo podman --remote info | grep -A2 remoteSocket
 
 The system service requires root, for instance `sudo`.
 
+`Error: unable to connect to Podman socket: Get "http://d/v3.4.0/libpod/_ping": dial unix /run/podman/podman.sock: connect: permission denied`
+
 Alternatively, one can use a root-equivalent group:
 
 
