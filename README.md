@@ -78,6 +78,10 @@ usermod -aG podman $SUDO_USER
 
 This is very similar to the "docker" group for docker.
 
+| **WARNING** |
+| ----------- |
+| The podman group grants privileges equivalent to the root user. |
+
 ## Processes
 
 ```text
