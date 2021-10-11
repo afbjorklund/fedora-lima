@@ -2,6 +2,8 @@
 
 See <https://github.com/lima-vm/lima>
 
+Requires Lima version 0.7.0 or later
+
 ## Usage
 Run `limactl start fedora-podman.yaml` to create a Lima instance named "fedora-podman".
 
