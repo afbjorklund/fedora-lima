@@ -24,3 +24,10 @@ limactl shell fedora-podman sudo podman
 $ limactl shell fedora-podman sudo podman info | grep rootless
     rootless: false
 ```
+
+## Examples
+
+[examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
+
+[examples/podman.yaml](examples/podman.yaml) runs podman with ubuntu (not fedora)
+
