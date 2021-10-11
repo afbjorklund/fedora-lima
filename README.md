@@ -15,6 +15,8 @@ limactl shell fedora-podman podman
 
 ```console
 $ export LIMA_INSTANCE=fedora-podman
+$ lima podman version
+...
 $ lima podman info | grep rootless
     rootless: true
 ```
@@ -23,6 +25,12 @@ The remote socket is listening as well, if needed:
 
 ```console
 $ lima systemctl --user status podman.socket
+...
+$ lima podman --remote version
+Client
+...
+
+Server
 ...
 $ lima podman --remote info | grep -A2 remoteSocket
   remoteSocket:
@@ -36,6 +44,8 @@ limactl shell fedora-podman sudo podman
 
 ```console
 $ export LIMA_INSTANCE=fedora-podman
+$ lima sudo podman version
+...
 $ lima sudo podman info | grep rootless
     rootless: false
 ```
@@ -44,6 +54,12 @@ The remote socket is listening as well, if needed:
 
 ```console
 $ lima sudo systemctl --system status podman.socket
+...
+$ lima sudo podman --remote version
+Client
+...
+
+Server
 ...
 $ lima sudo podman --remote info | grep -A2 remoteSocket
   remoteSocket:
