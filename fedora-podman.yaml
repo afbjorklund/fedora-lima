@@ -1,6 +1,11 @@
 ---
 # This example requires Lima v0.7.0 or later.
 
+# Arch: "default", "x86_64", "aarch64".
+# "default" corresponds to the host architecture.
+arch: "default"
+
+# An image must support systemd and cloud-init.
 images:
   - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2"
     arch: "x86_64"
