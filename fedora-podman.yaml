@@ -16,11 +16,11 @@ images:
 
 # CPUs
 # Default: 4
-cpus: 1
+cpus: 2
 
 # Memory size
 # Default: "4GiB"
-memory: "1GiB"
+memory: "2GiB"
 
 # Disk size
 # Default: "100GiB"
