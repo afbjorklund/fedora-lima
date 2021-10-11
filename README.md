@@ -14,7 +14,8 @@ To open a shell, run `limactl shell fedora-podman bash` or `LIMA_INSTANCE=fedora
 limactl shell fedora-podman podman
 
 ```console
-$ limactl shell fedora-podman podman info | grep rootless
+$ export LIMA_INSTANCE=fedora-podman
+$ lima podman info | grep rootless
     rootless: true
 ```
 
@@ -23,7 +24,8 @@ $ limactl shell fedora-podman podman info | grep rootless
 limactl shell fedora-podman sudo podman
 
 ```console
-$ limactl shell fedora-podman sudo podman info | grep rootless
+$ export LIMA_INSTANCE=fedora-podman
+$ lima sudo podman info | grep rootless
     rootless: false
 ```
 
