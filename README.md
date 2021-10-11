@@ -27,6 +27,30 @@ $ limactl shell fedora-podman sudo podman info | grep rootless
     rootless: false
 ```
 
+## Processes
+
+```text
+systemd─┬─NetworkManager───2*[{NetworkManager}]
+        ├─2*[agetty]
+        ├─auditd───{auditd}
+        ├─chronyd
+        ├─dbus-broker-lau───dbus-broker
+        ├─lima-guestagent───4*[{lima-guestagent}]
+        ├─sshd───sshd───sshd─┬─bash───pstree
+        │                    └─2*[sshfs───3*[{sshfs}]]
+        ├─sssd─┬─sssd_be
+        │      └─sssd_nss
+        ├─systemd───(sd-pam)
+        ├─systemd-homed
+        ├─systemd-hostnam
+        ├─systemd-journal
+        ├─systemd-logind
+        ├─systemd-oomd
+        ├─systemd-resolve
+        ├─systemd-udevd
+        └─systemd-userdbd───3*[systemd-userwor]
+```
+
 ## Examples
 
 [examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
