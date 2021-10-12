@@ -5,6 +5,7 @@ See <https://github.com/lima-vm/lima>
 Requires Lima version 0.7.0 or later
 
 ## Usage
+
 Run `limactl start fedora-podman.yaml` to create a Lima instance named "fedora-podman".
 
 To open a shell, run `limactl shell fedora-podman bash` or `LIMA_INSTANCE=fedora-podman lima`.
@@ -75,7 +76,6 @@ The system service requires root, for instance `sudo`.
 
 Alternatively, one can use a root-equivalent group:
 
-
 ```shell
 groupadd -f -r podman
 
@@ -129,4 +129,3 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
 [examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
 
 [examples/podman.yaml](examples/podman.yaml) runs podman with ubuntu (not fedora)
-
