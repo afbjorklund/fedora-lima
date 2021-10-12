@@ -84,7 +84,7 @@ But the system service requires root, for instance `sudo`.
 
 `Error: unable to connect to Podman socket: Get "http://d/v3.4.0/libpod/_ping": dial unix /run/podman/podman.sock: connect: permission denied`
 
-Alternatively, one can use a root-equivalent group:
+Alternatively, one can use a root-equivalent group: ([#6809](https://github.com/containers/podman/issues/6809))
 
 ```shell
 groupadd -f -r podman
