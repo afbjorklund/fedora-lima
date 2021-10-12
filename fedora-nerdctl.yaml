@@ -16,15 +16,15 @@ images:
 
 # CPUs
 # Default: 4
-cpus: 2
+cpus: 4
 
 # Memory size
 # Default: "4GiB"
-memory: "2GiB"
+memory: "4GiB"
 
 # Disk size
 # Default: "100GiB"
-disk: "20GiB"
+disk: "100GiB"
 
 mounts:
   - location: "~"
@@ -33,31 +33,19 @@ mounts:
     writable: true
 
 containerd:
-  system: false
-  user: false
-
-provision:
-  # `system` is executed with the root privilege
-  - mode: system
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      command -v podman >/dev/null 2>&1 && exit 0
-      dnf install -y podman
-      systemctl --system enable --now podman.socket
-  # `user` is executed without the root privilege
-  - mode: user
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      systemctl --user enable --now podman.socket
+  # Enable system-wide (aka rootful)  containerd and its dependencies (BuildKit, Stargz Snapshotter)
+  # Default: false
+  system: true
+  # Enable user-scoped (aka rootless) containerd and its dependencies
+  # Default: true
+  user: true
 
 probes:
   - script: |
       #!/bin/bash
       set -eux -o pipefail
-      if ! timeout 30s bash -c "until command -v podman >/dev/null 2>&1; do sleep 3; done"; then
-        echo >&2 "podman is not installed yet"
+      if ! timeout 30s bash -c "until command -v nerdctl >/dev/null 2>&1; do sleep 3; done"; then
+        echo >&2 "nerdctl is not installed yet"
         exit 1
       fi
     hint: See "/var/log/cloud-init-output.log". in the guest
