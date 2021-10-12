@@ -4,6 +4,12 @@ See <https://github.com/lima-vm/lima>
 
 Requires Lima version 0.7.0 or later
 
+## Background
+
+Podman will by default create virtual machines using [Fedora CoreOS](https://getfedora.org/en/coreos/).
+
+But it is also possible to create virtual machines using [Fedora Cloud](https://cloud.fedoraproject.org)...
+
 ## Usage
 
 Run `limactl start fedora-podman.yaml` to create a Lima instance named "fedora-podman".
