@@ -110,6 +110,38 @@ This is very similar to the "docker" group for docker.
 | ----------- |
 | The podman group grants privileges equivalent to the root user. |
 
+## Connections
+
+To view the information about lima instances:
+
+```console
+$ limactl list
+NAME             STATUS     SSH                ARCH      DIR
+fedora-podman    Running    127.0.0.1:45007    x86_64    /home/anders/.lima/fedora-podman
+```
+
+Then, to add a user connection: (as default)
+
+`podman system connection add --default lima ssh://127.0.0.1:45007`
+
+Or, to add a system connection: (requires root)
+
+`podman system connection add lima-root ssh://127.0.0.1:45007/run/podman/podman.sock`
+
+Now there are two different podman connections:
+
+```console
+$ podman system connection list
+Name        Identity    URI
+lima*                   ssh://anders@127.0.0.1:45007/run/user/1000/podman/podman.sock
+lima-root               ssh://anders@127.0.0.1:45007/run/podman/podman.sock
+```
+
+That can be used with the podman-remote client:
+
+`podman --remote --connection lima`
+`CONTAINER_CONNECTION=lima-root podman-remote`
+
 ## Processes
 
 ```text
