@@ -171,6 +171,12 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
         └─systemd-userdbd───3*[systemd-userwor]
 ```
 
+## Comparison
+
+`limactl start fedora-nerdctl.yaml`
+
+`limactl shell fedora-nerdctl nerdctl`
+
 ## Examples
 
 [examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
