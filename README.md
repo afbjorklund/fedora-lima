@@ -144,6 +144,7 @@ lima-root               ssh://anders@127.0.0.1:45007/run/podman/podman.sock
 That can be used with the podman-remote client:
 
 `podman --remote --connection lima`
+
 `CONTAINER_CONNECTION=lima-root podman-remote`
 
 ## Processes
