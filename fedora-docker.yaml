@@ -1,0 +1,82 @@
+---
+# This example requires Lima v0.7.0 or later.
+
+# Arch: "default", "x86_64", "aarch64".
+# "default" corresponds to the host architecture.
+arch: "default"
+
+# An image must support systemd and cloud-init.
+images:
+  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2"
+    arch: "x86_64"
+    digest: "sha256:b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea"
+  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/aarch64/images/Fedora-Cloud-Base-34-1.2.aarch64.qcow2"
+    arch: "aarch64"
+    digest: "sha256:141f16f52bfbe159947267658a0dbfbbe96fd5b988a95d1271f9c9ed61156da2"
+
+# CPUs
+# Default: 4
+cpus: 2
+
+# Memory size
+# Default: "4GiB"
+memory: "2GiB"
+
+# Disk size
+# Default: "100GiB"
+disk: "20GiB"
+
+mounts:
+  - location: "~"
+    writable: false
+  - location: "/tmp/lima"
+    writable: true
+
+containerd:
+  system: false
+  user: false
+
+provision:
+  # `system` is executed with the root privilege
+  - mode: system
+    script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      command -v docker >/dev/null 2>&1 && exit 0
+      dnf -y install -y dnf-plugins-core
+      dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+      dnf install -y docker-ce docker-ce-cli containerd.io
+      systemctl --system enable --now docker
+  # `user` is executed without the root privilege
+  - mode: user
+    script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      dockerd-rootless-setuptool.sh install
+      docker context use rootless
+      systemctl --user enable --now docker
+
+probes:
+  - script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+        echo >&2 "docker is not installed yet"
+        exit 1
+      fi
+      if ! timeout 30s bash -c "until pgrep rootlesskit; do sleep 3; done"; then
+        echo >&2 "rootlesskit (used by rootless docker) is not running"
+        exit 1
+      fi
+    hint: See "/var/log/cloud-init-output.log". in the guest
+
+firmware:
+  # Use legacy BIOS instead of UEFI.
+  # Default: false
+  legacyBIOS: true
+
+video:
+  # QEMU display, e.g., "none", "cocoa", "sdl".
+  # Default: "none"
+  display: "none"
+

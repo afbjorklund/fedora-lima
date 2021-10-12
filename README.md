@@ -173,6 +173,14 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
 
 ## Comparison
 
+### docker
+
+`limactl start fedora-docker.yaml`
+
+`limactl shell fedora-docker docker`
+
+### nerdctl
+
 `limactl start fedora-nerdctl.yaml`
 
 `limactl shell fedora-nerdctl nerdctl`
