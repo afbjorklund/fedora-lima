@@ -70,7 +70,11 @@ $ lima sudo podman --remote info | grep -A2 remoteSocket
 
 ## Root
 
-The system service requires root, for instance `sudo`.
+By default, podman will use user unless switching socket:
+
+`export CONTAINER_HOST=unix:/run/podman/podman.sock`
+
+But the system service requires root, for instance `sudo`.
 
 `Error: unable to connect to Podman socket: Get "http://d/v3.4.0/libpod/_ping": dial unix /run/podman/podman.sock: connect: permission denied`
 
