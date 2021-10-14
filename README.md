@@ -175,11 +175,15 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
 
 ### docker
 
+See <https://docs.docker.com/engine/install/fedora/>
+
 `limactl start fedora-docker.yaml`
 
 `limactl shell fedora-docker docker`
 
 ### nerdctl
+
+`nerdctl` is a client for `containerd` and `buildkitd`
 
 `limactl start fedora-nerdctl.yaml`
 
