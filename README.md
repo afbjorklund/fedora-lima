@@ -27,7 +27,11 @@ limactl shell fedora-podman podman
 ```console
 $ export LIMA_INSTANCE=fedora-podman
 $ lima podman version
-...
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 $ lima podman info | grep rootless
     rootless: true
 ```
@@ -38,11 +42,19 @@ The remote socket is listening as well, if needed:
 $ lima systemctl --user status podman.socket
 ...
 $ lima podman --remote version
-Client
-...
+Client:
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 
-Server
-...
+Server:
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 $ lima podman --remote info | grep -A2 remoteSocket
   remoteSocket:
     exists: true
@@ -56,7 +68,11 @@ limactl shell fedora-podman sudo podman
 ```console
 $ export LIMA_INSTANCE=fedora-podman
 $ lima sudo podman version
-...
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 $ lima sudo podman info | grep rootless
     rootless: false
 ```
@@ -67,11 +83,19 @@ The remote socket is listening as well, if needed:
 $ lima sudo systemctl --system status podman.socket
 ...
 $ lima sudo podman --remote version
-Client
-...
+Client:
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 
-Server
-...
+Server:
+Version:      3.4.0
+API Version:  3.4.0
+Go Version:   go1.16.8
+Built:        Thu Sep 30 19:40:21 2021
+OS/Arch:      linux/amd64
 $ lima sudo podman --remote info | grep -A2 remoteSocket
   remoteSocket:
     exists: true
