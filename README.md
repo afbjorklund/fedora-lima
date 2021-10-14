@@ -181,6 +181,8 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 `limactl shell fedora-docker docker`
 
+`limactl shell fedora-docker sudo docker`
+
 ### nerdctl
 
 `nerdctl` is a client for `containerd` and `buildkitd`
@@ -188,6 +190,8 @@ See <https://docs.docker.com/engine/install/fedora/>
 `limactl start fedora-nerdctl.yaml`
 
 `limactl shell fedora-nerdctl nerdctl`
+
+`limactl shell fedora-nerdctl sudo nerdctl`
 
 ## Examples
 
