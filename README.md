@@ -222,3 +222,9 @@ See <https://docs.docker.com/engine/install/fedora/>
 [examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
 
 [examples/podman.yaml](examples/podman.yaml) runs podman with ubuntu (not fedora)
+
+lima default:
+
+[examples/ubuntu.yaml](examples/fedora.yaml) (the `default`) runs containerd with ubuntu
+
+> "The goal of Lima is to promote containerd including nerdctl to Mac users"
