@@ -150,19 +150,19 @@ fedora-podman    Running    127.0.0.1:45007    x86_64    /home/anders/.lima/fedo
 
 Then, to add a user connection: (as default)
 
-`podman system connection add --default lima ssh://127.0.0.1:45007`
+`podman system connection add --identity ~/.lima/_config/user --default lima ssh://127.0.0.1:45007`
 
 Or, to add a system connection: (requires root)
 
-`podman system connection add lima-root ssh://127.0.0.1:45007/run/podman/podman.sock`
+`podman system connection add --identity ~/.lima/_config/user lima-root ssh://127.0.0.1:45007/run/podman/podman.sock`
 
 Now there are two different podman connections:
 
 ```console
 $ podman system connection list
-Name        Identity    URI
-lima*                   ssh://anders@127.0.0.1:45007/run/user/1000/podman/podman.sock
-lima-root               ssh://anders@127.0.0.1:45007/run/podman/podman.sock
+Name        Identity                         URI
+lima*       /home/anders/.lima/_config/user  ssh://anders@127.0.0.1:45007/run/user/1000/podman/podman.sock
+lima-root   /home/anders/.lima/_config/user  ssh://anders@127.0.0.1:45007/run/podman/podman.sock
 ```
 
 That can be used with the podman-remote client:
