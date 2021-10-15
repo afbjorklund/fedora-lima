@@ -217,6 +217,12 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 `limactl shell fedora-nerdctl sudo nerdctl`
 
+### kubernetes
+
+`limactl --debug start fedora-kubernetes.yaml`
+
+`limactl shell fedora-kubernetes kubectl`
+
 ## Examples
 
 [examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
