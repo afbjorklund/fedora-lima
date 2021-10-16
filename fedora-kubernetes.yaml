@@ -20,7 +20,7 @@ mounts:
     writable: true
 
 containerd:
-  system: true
+  system: false
   user: false
 
 # See https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/
@@ -30,10 +30,15 @@ provision:
       #!/bin/bash
       set -eux -o pipefail
       # containerd
+      yum install -y containerd
       mkdir -p /etc/containerd
       containerd config default | sed -e '/bin_dir/ s|/opt/cni/bin|/usr/libexec/cni|' | sudo tee /etc/containerd/config.toml
       systemctl restart containerd
       # buildkit
+      #yum install -y buildkit
+        yum install -y golang-github-moby-buildkit
+        curl -L https://raw.githubusercontent.com/moby/buildkit/master/examples/systemd/buildkit.service | sed -e '/ExecStart/ s|/usr/local/bin|/usr/bin|' | sudo tee /usr/lib/systemd/system/buildkit.service
+        curl -L https://raw.githubusercontent.com/moby/buildkit/master/examples/systemd/buildkit.socket | sudo tee /usr/lib/systemd/system/buildkit.socket
       mkdir -p /etc/buildkit
       cat  <<EOF | sudo tee /etc/buildkit/buildkitd.toml
       [worker.oci]
