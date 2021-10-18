@@ -7,12 +7,12 @@ arch: "default"
 
 # An image must support systemd and cloud-init.
 images:
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2"
+  - location: "https://cloud.centos.org/centos/8/x86_64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.x86_64.qcow2"
     arch: "x86_64"
-    digest: "sha256:b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea"
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/aarch64/images/Fedora-Cloud-Base-34-1.2.aarch64.qcow2"
+    digest: "sha256:3510fc7deb3e1939dbf3fe6f65a02ab1efcc763480bc352e4c06eca2e4f7c2a2"
+  - location: "https://cloud.centos.org/centos/8/aarch64/images/CentOS-8-GenericCloud-8.4.2105-20210603.0.aarch64.qcow2"
     arch: "aarch64"
-    digest: "sha256:141f16f52bfbe159947267658a0dbfbbe96fd5b988a95d1271f9c9ed61156da2"
+    digest: "sha256:8029d9ec018c54dc48f02d01200002b36ba69c6c6ea58334857eb172ab32e5d7"
 
 # CPUs
 # Default: 4
