@@ -225,12 +225,17 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 ## Examples
 
-[examples/fedora.yaml](examples/fedora.yaml) runs containerd (not podman) with fedora
+[examples/fedora.yaml](https://github.com/lima-vm/lima/tree/master/examples/fedora.yaml) runs containerd (not podman) with fedora
 
-[examples/podman.yaml](examples/podman.yaml) runs podman with ubuntu (not fedora)
+[examples/podman.yaml](https://github.com/lima-vm/lima/tree/master/examples/podman.yaml) runs podman with ubuntu (not fedora)
 
 lima default:
 
-[examples/ubuntu.yaml](examples/fedora.yaml) (the `default`) runs containerd with ubuntu
+[examples/ubuntu.yaml](https://github.com/lima-vm/lima/tree/master/examples/ubuntu.yaml) (the `default`) runs containerd with ubuntu
 
 > "The goal of Lima is to promote containerd including nerdctl to Mac users"
+
+[examples/docker.yaml](https://github.com/lima-vm/lima/tree/master/examples/fedora.yaml) runs docker (not podman) on ubuntu (not fedora)
+
+[examples/k8s.yaml](https://github.com/lima-vm/lima/tree/master/examples/k8s.yaml) runs kubernetes by using containerd with ubuntu
+
