@@ -225,24 +225,24 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 ## Examples
 
+lima default:
+
+[examples/ubuntu.yaml](https://github.com/lima-vm/lima/tree/master/examples/ubuntu.yaml) (the `default`) runs **containerd** with **ubuntu**
+
+> "The goal of Lima is to promote containerd including nerdctl to Mac users"
+
 [examples/fedora.yaml](https://github.com/lima-vm/lima/tree/master/examples/fedora.yaml) runs containerd (not podman) with fedora
 
 [examples/podman.yaml](https://github.com/lima-vm/lima/tree/master/examples/podman.yaml) runs podman with ubuntu (not fedora)
 
-lima default:
-
-[examples/ubuntu.yaml](https://github.com/lima-vm/lima/tree/master/examples/ubuntu.yaml) (the `default`) runs containerd with ubuntu
-
-> "The goal of Lima is to promote containerd including nerdctl to Mac users"
-
-[examples/docker.yaml](https://github.com/lima-vm/lima/tree/master/examples/fedora.yaml) runs docker (not podman) on ubuntu (not fedora)
+[examples/docker.yaml](https://github.com/lima-vm/lima/tree/master/examples/docker.yaml) runs docker (not podman) with ubuntu (not fedora)
 
 [examples/k8s.yaml](https://github.com/lima-vm/lima/tree/master/examples/k8s.yaml) runs kubernetes by using containerd with ubuntu
 
 So we learn that:
 
-1) containerd is the standard container runtime
+1) containerd is the (new) standard container runtime
 
-2) ubuntu is the standard cloud distribution
+2) ubuntu is (still) the standard cloud linux distribution
 
-Or something.
+Or something. 😉
