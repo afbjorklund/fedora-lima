@@ -16,9 +16,9 @@ But it is also possible to create virtual machines using [Fedora Cloud](https://
 
 ### History
 
-Podman version 1 (varlink) created virtual machines using [Fedora Linux](https://github.com/boot2podman/boot2podman-fedora-iso).
-
 This can still be done "manually", and `podman` installed using `dnf`.
+
+Podman version 1 (varlink) created virtual machines using [Fedora Linux](https://github.com/boot2podman/boot2podman-fedora-iso).
 
 ## Usage
 
