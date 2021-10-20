@@ -241,9 +241,9 @@ lima default:
 
 Container engines:
 
-[examples/podman.yaml](https://github.com/lima-vm/lima/tree/master/examples/podman.yaml) runs podman with ubuntu (not fedora)
-
 [examples/docker.yaml](https://github.com/lima-vm/lima/tree/master/examples/docker.yaml) runs docker (not podman) with ubuntu (not fedora)
+
+[examples/podman.yaml](https://github.com/lima-vm/lima/tree/master/examples/podman.yaml) runs podman with ubuntu (not fedora)
 
 Container orchestration:
 
