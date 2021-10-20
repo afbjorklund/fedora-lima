@@ -239,3 +239,10 @@ lima default:
 
 [examples/k8s.yaml](https://github.com/lima-vm/lima/tree/master/examples/k8s.yaml) runs kubernetes by using containerd with ubuntu
 
+So we learn that:
+
+1) containerd is the standard container runtime
+
+2) ubuntu is the standard cloud distribution
+
+Or something.
