@@ -245,6 +245,8 @@ lima default:
 
 [examples/k8s.yaml](https://github.com/lima-vm/lima/tree/master/examples/k8s.yaml) runs kubernetes by using containerd with ubuntu
 
+[examples/nomad.yaml](https://github.com/lima-vm/lima/tree/master/examples/nomad.yaml) runs nomad by using containerd with ubuntu
+
 So we learn that:
 
 1) containerd is the (new) standard container runtime
