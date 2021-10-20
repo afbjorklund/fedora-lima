@@ -10,9 +10,15 @@ Podman is a Linux-only program, that creates Linux containers/images.
 
 Therefore it needs to create a Linux virtual machine (VM), on other OS.
 
-Podman will by default create virtual machines using [Fedora CoreOS](https://getfedora.org/en/coreos/).
+Podman v3 will by default create virtual machines using [Fedora CoreOS](https://getfedora.org/en/coreos/).
 
 But it is also possible to create virtual machines using [Fedora Cloud](https://cloud.fedoraproject.org)...
+
+### History
+
+Podman version 1 (varlink) created virtual machines using [Fedora](https://github.com/boot2podman/boot2podman-fedora-iso).
+
+This can still be done "manually", and `podman` installed using `dnf`.
 
 ## Usage
 
