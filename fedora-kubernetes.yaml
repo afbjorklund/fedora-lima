@@ -3,21 +3,17 @@
 
 arch: "default"
 images:
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2"
+  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
     arch: "x86_64"
-    digest: "sha256:b9b621b26725ba95442d9a56cbaa054784e0779a9522ec6eafff07c6e6f717ea"
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/aarch64/images/Fedora-Cloud-Base-34-1.2.aarch64.qcow2"
+    digest: "sha256:fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6"
+  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/aarch64/images/Fedora-Cloud-Base-35-1.2.aarch64.qcow2"
     arch: "aarch64"
-    digest: "sha256:141f16f52bfbe159947267658a0dbfbbe96fd5b988a95d1271f9c9ed61156da2"
+    digest: "sha256:c71f2e6ce75b516d565e2c297ea9994c69b946cb3eaa0a4bbea400dbd6f59ae6"
 
 cpus: 2
 memory: "2GiB"
 
-mounts:
-  - location: "~"
-    writable: false
-  - location: "/tmp/lima"
-    writable: true
+mounts: []
 
 containerd:
   system: false
@@ -52,7 +48,7 @@ provision:
     script: |
       #!/bin/bash
       set -eux -o pipefail
-      command -v kubectl && exit 0
+      command -v kubectl  >/dev/null 2>&1 && exit 0
       # Installing kubeadm on your hosts
       cat <<EOF | sudo tee /etc/modules-load.d/containerd.conf
       overlay
@@ -96,7 +92,7 @@ provision:
       test -e /etc/kubernetes/admin.conf && exit 0
       export KUBECONFIG=/etc/kubernetes/admin.conf
       # Initializing your control-plane node
-      kubeadm init --cri-socket=/run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16
+      kubeadm init --cri-socket=/run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans 127.0.0.1
       # Installing a Pod network add-on
       kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.14.0/Documentation/kube-flannel.yml
       # Control plane node isolation
@@ -106,7 +102,7 @@ provision:
       #!/bin/bash
       set -eux -o pipefail
       mkdir -p $HOME/.kube
-      sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+      sudo cp -f /etc/kubernetes/admin.conf $HOME/.kube/config
       sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
 probes:
@@ -117,14 +113,17 @@ probes:
         echo >&2 "kubectl is not installed yet"
         exit 1
       fi
-    hint: See "/var/log/cloud-init-output.log". in the guest
+    hint: |
+      See "/var/log/cloud-init-output.log". in the guest
   - script: |
       #!/bin/bash
       set -eux -o pipefail
-      if ! timeout 300s bash -c "until test -e /etc/kubernetes/admin.conf >/dev/null 2>&1; do sleep 3; done"; then
-        echo >&2 "/etc/kubernetes/admin.conf is not installed yet"
+      if ! timeout 300s bash -c "until test -f /etc/kubernetes/admin.conf; do sleep 3; done"; then
+        echo >&2 "k8s is not running yet"
         exit 1
       fi
+    hint: |
+      The k8s kubeconfig file has not yet been created.
   - script: |
       #!/bin/bash
       set -eux -o pipefail
