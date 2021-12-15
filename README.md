@@ -2,7 +2,7 @@
 
 See <https://github.com/lima-vm/lima>
 
-Requires Lima version 0.7.0 or later
+Requires Lima version 0.8.0 or later
 
 ## Background
 
