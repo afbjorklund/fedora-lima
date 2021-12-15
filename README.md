@@ -4,6 +4,8 @@ See <https://github.com/lima-vm/lima>
 
 Requires Lima version 0.8.0 or later
 
+![lime fedora](lime-fedora.png)
+
 ## Background
 
 Podman is a Linux-only program, that creates Linux containers/images.
