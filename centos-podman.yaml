@@ -1,5 +1,9 @@
 ---
-# This example requires Lima v0.7.0 or later.
+# Hint: To allow `podman` CLI on the host to connect to the Podman daemon running inside the guest, run the following commands:
+# $ export CONTAINER_HOST=$(limactl list centos --format 'unix://{{.Dir}}/sock/podman.sock')
+# $ podman --remote ...
+
+# This example requires Lima v0.8.0 or later
 
 # Arch: "default", "x86_64", "aarch64".
 # "default" corresponds to the host architecture.
@@ -61,6 +65,15 @@ probes:
         exit 1
       fi
     hint: See "/var/log/cloud-init-output.log". in the guest
+
+portForwards:
+  - guestSocket: "/run/user/{{.UID}}/podman/podman.sock"
+    hostSocket: "{{.Dir}}/sock/podman.sock"
+
+message: |
+  To run `podman` on the host (assumes podman-remote is installed):
+  $ export CONTAINER_HOST=unix://{{.Dir}}/sock/podman.sock
+  $ podman{{if eq .HostOS "linux"}}-remote{{end}} ...
 
 firmware:
   # Use legacy BIOS instead of UEFI.
