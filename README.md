@@ -110,6 +110,20 @@ $ lima sudo podman --remote info | grep -A2 remoteSocket
     path: /run/podman/podman.sock
 ```
 
+## Socket
+
+The new version of lima automatically sets up unix sockets.
+
+So you can connect directly to the VM, by setting a variable:
+
+`export CONTAINER_HOST=unix://$DIR/sock/podman.sock`
+
+And lima will make sure to tunnel this to the VM, using SSH.
+
+You can use `limactl list`, to see the instance directory.
+
+Normally it is located in a subdirectory, under `~/.lima`.
+
 ## Root
 
 By default, podman will use user unless switching socket:
