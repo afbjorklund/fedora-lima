@@ -1,4 +1,4 @@
-# Lima
+# Fedora Lima
 
 See <https://github.com/lima-vm/lima>
 
