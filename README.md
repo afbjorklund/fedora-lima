@@ -197,6 +197,50 @@ That can be used with the podman-remote client:
 
 `CONTAINER_CONNECTION=lima-root podman-remote`
 
+## Packages
+
+Lima starts with a Fedora Cloud .qcow2 installation.
+
+* Kickstart: [fedora-cloud-base.ks](https://pagure.io/fedora-kickstarts/blob/f35/f/fedora-cloud-base.ks)
+
+```kickstart
+%packages --instLangs=en
+@^cloud-server-environment
+-kernel
+kernel-core
+-dracut-config-rescue
+-plymouth
+qemu-guest-agent
+-firewalld
+-geolite2-country
+-geolite2-city
+%end
+```
+
+* Comp: [comps-f35.xml.in](https://pagure.io/fedora-comps/blob/main/f/comps-f35.xml.in)
+
+```xml
+  <environment>
+    <id>cloud-server-environment</id>
+    <_name>Fedora Cloud Server</_name>
+    <_description>A server install with components needed to run in a cloud environment.</_description>
+    <grouplist>
+      <groupid>cloud-bootloader-tools</groupid>
+      <groupid>cloud-server</groupid>
+      <groupid>core</groupid>
+    </grouplist>
+    <optionlist>
+      ...
+    </optionlist>
+  </environment>
+```
+
+Then it adds the following RPMS, through cloud-init:
+
+* `fuse-sshfs`
+
+* `iptables`
+
 ## Processes
 
 ```text
