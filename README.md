@@ -265,6 +265,16 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
         └─systemd-userdbd───3*[systemd-userwor]
 ```
 
+## CentOS
+
+[CentOS Stream](https://www.centos.org/centos-stream/) freezes an older version of Fedora.
+
+It will eventually become Red Hat Enterprise Linux.
+
+Except for the image URLs, it is same (as fc28):
+
+`limactl start centos-podman.yaml`
+
 ## Comparison
 
 ### docker
