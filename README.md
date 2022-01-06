@@ -22,6 +22,10 @@ This can still be done "manually", and `podman` installed using `dnf`.
 
 Podman version 1 (varlink) created virtual machines using [Fedora Linux](https://github.com/boot2podman/boot2podman-fedora-iso).
 
+Doing an ISO would require writing a custom "kickstart" file, for Lima.
+
+It would be a "live" image, similar to [alpine-lima](https://github.com/afbjorklund/alpine-lima). See the [fedora-live](https://github.com/afbjorklund/fedora-live) files.
+
 ## Usage
 
 Run `limactl start fedora-podman.yaml` to create a Lima instance named "fedora-podman".
