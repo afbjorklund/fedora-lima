@@ -271,9 +271,14 @@ systemd─┬─NetworkManager───2*[{NetworkManager}]
 
 It will eventually become Red Hat Enterprise Linux.
 
-Except for the image URLs, it is same (as fc28):
+Except for the image URLs, it is same:
 
 `limactl start centos-podman.yaml`
+
+Fedora | CentOS |
+------ | ------ |
+fc28   | el8    |
+fc34   | el9    |
 
 ## Comparison
 
