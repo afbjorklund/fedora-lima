@@ -301,7 +301,7 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 `limactl --debug start fedora-kubernetes.yaml`
 
-`limactl shell fedora-kubernetes kubectl`
+`limactl shell fedora-kubernetes sudo kubectl`
 
 ## Examples
 
