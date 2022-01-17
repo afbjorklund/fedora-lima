@@ -1,4 +1,5 @@
 # This example requires Lima v0.7.0 or later.
+# Warning: End-Of-Life, kept for reference
 images:
 - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/34/Cloud/x86_64/images/Fedora-Cloud-Base-34-1.2.x86_64.qcow2"
   arch: "x86_64"
