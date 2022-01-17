@@ -59,4 +59,3 @@ video:
   # QEMU display, e.g., "none", "cocoa", "sdl", "gtk".
   # Default: "none"
   display: "none"
-
