@@ -2,10 +2,11 @@
 # This example requires Lima v0.7.0 or later.
 
 # Arch: "default", "x86_64", "aarch64".
-# "default" corresponds to the host architecture.
+# Default: "default" (corresponds to the host architecture)
 arch: "default"
 
 # An image must support systemd and cloud-init.
+# Default: none (must be specified)
 images:
 - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
   arch: "x86_64"
@@ -41,19 +42,20 @@ containerd:
   user: true
 
 probes:
-- script: |
+- description: nerdctl to be installed
+  script: |
     #!/bin/bash
     set -eux -o pipefail
-    if ! timeout 30s bash -c "until command -v nerdctl >/dev/null 2>&1; do sleep 3; done"; then
+    if ! timeout 30s bash -c "until command -v nerdctl; do sleep 3; done"; then
       echo >&2 "nerdctl is not installed yet"
       exit 1
     fi
-  hint: See "/var/log/cloud-init-output.log". in the guest
+  hint: See "/var/log/cloud-init-output.log" in the guest
 
 firmware:
   # Use legacy BIOS instead of UEFI.
   # Default: false
-  legacyBIOS: true
+  legacyBIOS: false
 
 video:
   # QEMU display, e.g., "none", "cocoa", "sdl", "gtk".

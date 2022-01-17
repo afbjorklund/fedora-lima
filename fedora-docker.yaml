@@ -6,10 +6,11 @@
 # This example requires Lima v0.8.0 or later
 
 # Arch: "default", "x86_64", "aarch64".
-# "default" corresponds to the host architecture.
+# Default: "default" (corresponds to the host architecture)
 arch: "default"
 
 # An image must support systemd and cloud-init.
+# Default: none (must be specified)
 images:
 - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
   arch: "x86_64"
@@ -44,6 +45,10 @@ provision:
 # `system` is executed with the root privilege
 - mode: system
   script: |
+    #!/bin/sh
+    sed -i 's/host.lima.internal.*/host.lima.internal host.docker.internal/' /etc/hosts
+- mode: system
+  script: |
     #!/bin/bash
     set -eux -o pipefail
     command -v docker >/dev/null 2>&1 && exit 0
@@ -51,20 +56,23 @@ provision:
     dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
     dnf install -y docker-ce docker-ce-cli containerd.io
     systemctl --system enable --now docker
+    dnf -y install shadow-utils dbus-common
 # `user` is executed without the root privilege
 - mode: user
   script: |
     #!/bin/bash
     set -eux -o pipefail
+    systemctl --user start dbus
     dockerd-rootless-setuptool.sh install
     docker context use rootless
     systemctl --user enable --now docker
 
 probes:
-- script: |
+- description: docker to be installed
+  script: |
     #!/bin/bash
     set -eux -o pipefail
-    if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+    if ! timeout 30s bash -c "until command -v docker; do sleep 3; done"; then
       echo >&2 "docker is not installed yet"
       exit 1
     fi
@@ -72,7 +80,7 @@ probes:
       echo >&2 "rootlesskit (used by rootless docker) is not running"
       exit 1
     fi
-  hint: See "/var/log/cloud-init-output.log". in the guest
+  hint: See "/var/log/cloud-init-output.log" in the guest
 
 portForwards:
 - guestSocket: "/run/user/{{.UID}}/docker.sock"
@@ -86,7 +94,7 @@ message: |
 firmware:
   # Use legacy BIOS instead of UEFI.
   # Default: false
-  legacyBIOS: true
+  legacyBIOS: false
 
 video:
   # QEMU display, e.g., "none", "cocoa", "sdl", "gtk".
