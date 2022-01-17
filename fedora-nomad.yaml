@@ -1,0 +1,62 @@
+# This example requires Lima v0.7.0 or later.
+
+arch: "default"
+images:
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6"
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/aarch64/images/Fedora-Cloud-Base-35-1.2.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:c71f2e6ce75b516d565e2c297ea9994c69b946cb3eaa0a4bbea400dbd6f59ae6"
+cpus: 2
+memory: "2GiB"
+mounts: []
+containerd:
+  system: true
+  user: false
+# See https://learn.hashicorp.com/tutorials/nomad/get-started-install
+provision:
+- mode: system
+  script: |
+    #!/bin/sh
+    command -v nomad >/dev/null 2>&1 && exit 0
+    dnf install -y dnf-plugins-core
+    dnf config-manager --add-repo https://rpm.releases.hashicorp.com/fedora/hashicorp.repo
+    dnf -y install nomad consul golang-github-cloudflare-cfssl
+    touch /etc/consul.d/consul.env && chown consul:consul /etc/consul.d/consul.env && chmod u+s /opt/consul  # fix bugs in rpm
+    sed -e '/^client/a \ \ cni_path = "/usr/local/libexec/cni"\n\ \ cni_config_dir = "/etc/cni/net.d"' -i /etc/nomad.d/nomad.hcl
+    # install containerd-driver
+    DRIVER_VERSION=0.9.2
+    case $(uname -m) in
+      amd64|x86_64)
+        curl -sSL -o containerd-driver https://github.com/Roblox/nomad-driver-containerd/releases/download/v${DRIVER_VERSION}/containerd-driver
+        ;;
+      arm64|aarch64)
+        curl -sSL -o containerd-driver https://github.com/Roblox/nomad-driver-containerd/releases/download/v${DRIVER_VERSION}/containerd-driver-arm64
+        ;;
+    esac
+    sudo install -D containerd-driver /opt/nomad/data/plugins/containerd-driver
+    cat <<EOF | sudo tee -a /etc/nomad.d/nomad.hcl
+
+    plugin "containerd-driver" {
+      config {
+          enabled = true
+          containerd_runtime = "io.containerd.runc.v2"
+          stats_interval = "5s"
+      }
+    }
+    EOF
+    systemctl enable --now nomad consul
+- mode: user
+  script: |
+    #!/bin/sh
+    nomad -autocomplete-install
+probes:
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v nomad >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "nomad is not installed yet"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest

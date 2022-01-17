@@ -308,6 +308,12 @@ See <https://docs.docker.com/engine/install/fedora/>
 
 `limactl shell fedora-kubernetes sudo kubectl`
 
+### nomad
+
+`limactl --debug start fedora-nomad.yaml`
+
+`limactl shell fedora-nomad nomad`
+
 ## Examples
 
 lima default:

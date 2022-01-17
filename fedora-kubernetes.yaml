@@ -16,34 +16,11 @@ memory: "2GiB"
 mounts: []
 
 containerd:
-  system: false
+  system: true
   user: false
 
 # See https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/
 provision:
-- mode: system
-  script: |
-    #!/bin/bash
-    set -eux -o pipefail
-    # containerd
-    yum install -y containerd
-    mkdir -p /etc/containerd
-    containerd config default | sed -e '/bin_dir/ s|/opt/cni/bin|/usr/libexec/cni|' | sudo tee /etc/containerd/config.toml
-    systemctl restart containerd
-    # buildkit
-    #yum install -y buildkit
-      yum install -y golang-github-moby-buildkit
-      curl -L https://raw.githubusercontent.com/moby/buildkit/master/examples/systemd/buildkit.service | sed -e '/ExecStart/ s|/usr/local/bin|/usr/bin|' | sudo tee /usr/lib/systemd/system/buildkit.service
-      curl -L https://raw.githubusercontent.com/moby/buildkit/master/examples/systemd/buildkit.socket | sudo tee /usr/lib/systemd/system/buildkit.socket
-    mkdir -p /etc/buildkit
-    cat  <<EOF | sudo tee /etc/buildkit/buildkitd.toml
-    [worker.oci]
-      enabled = false
-    [worker.containerd]
-      enabled = true
-      namespace = "k8s.io"
-    EOF
-    systemctl restart buildkit
 - mode: system
   script: |
     #!/bin/bash
@@ -79,7 +56,9 @@ provision:
     image-endpoint: unix:///run/containerd/containerd.sock
     EOF
     # cni-plugins
-    yum install -y containernetworking-plugins-0.9.1-4.fc34 # flannel
+    yum install -y containernetworking-plugins
+    yum install -y kubernetes-cni --disableexcludes=kubernetes
+    rm -f /etc/cni/net.d/*.conf*
     # Set SELinux in permissive mode (effectively disabling it)
     setenforce 0
     sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
@@ -94,7 +73,10 @@ provision:
     kubeadm config images list
     kubeadm config images pull
     # Initializing your control-plane node
-    kubeadm init --cri-socket=/run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans 127.0.0.1
+    echo "KUBELET_EXTRA_ARGS=--fail-swap-on=false" >/etc/sysconfig/kubelet
+    grep ${LIMA_CIDATA_NAME} /etc/hosts || echo "${LIMA_CIDATA_SLIRP_IP_ADDRESS:-192.168.5.15} lima-${LIMA_CIDATA_NAME}" >>/etc/hosts
+    kubeadm init --cri-socket=/run/containerd/containerd.sock --pod-network-cidr=10.244.0.0/16 --apiserver-cert-extra-sans 127.0.0.1 \
+                 --ignore-preflight-errors=Swap # /dev/zram0
     # Installing a Pod network add-on
     kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/v0.14.0/Documentation/kube-flannel.yml
     # Control plane node isolation
@@ -103,7 +85,8 @@ provision:
     mkdir -p ${HOME:-/root}/.kube && cp -f $KUBECONFIG ${HOME:-/root}/.kube/config
 
 probes:
-- script: |
+- description: "kubectl to be installed"
+  script: |
     #!/bin/bash
     set -eux -o pipefail
     if ! timeout 30s bash -c "until command -v kubectl >/dev/null 2>&1; do sleep 3; done"; then
@@ -112,7 +95,8 @@ probes:
     fi
   hint: |
     See "/var/log/cloud-init-output.log". in the guest
-- script: |
+- description: "kubeadm to be completed"
+  script: |
     #!/bin/bash
     set -eux -o pipefail
     if ! timeout 300s bash -c "until test -f /etc/kubernetes/admin.conf; do sleep 3; done"; then
@@ -121,7 +105,8 @@ probes:
     fi
   hint: |
     The k8s kubeconfig file has not yet been created.
-- script: |
+- description: "kubernetes cluster to be running"
+  script: |
     #!/bin/bash
     set -eux -o pipefail
     if ! timeout 300s bash -c "until sudo kubectl version >/dev/null 2>&1; do sleep 3; done"; then
