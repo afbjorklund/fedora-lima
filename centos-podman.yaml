@@ -11,12 +11,12 @@ arch: "default"
 
 # An image must support systemd and cloud-init.
 images:
-  - location: "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20210603.0.x86_64.qcow2"
-    arch: "x86_64"
-    digest: "sha256:8e22e67687b81e38c7212fc30c47cb24cbc4935c0f2459ed139f498397d1e7cd"
-  - location: "https://cloud.centos.org/centos/8-stream/aarch64/images/CentOS-Stream-GenericCloud-8-20210603.0.aarch64.qcow2"
-    arch: "aarch64"
-    digest: "sha256:935d23342c953f298293f4a6f2c3d072414226609140b674719ced3a4b86b147"
+- location: "https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20210603.0.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:8e22e67687b81e38c7212fc30c47cb24cbc4935c0f2459ed139f498397d1e7cd"
+- location: "https://cloud.centos.org/centos/8-stream/aarch64/images/CentOS-Stream-GenericCloud-8-20210603.0.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:935d23342c953f298293f4a6f2c3d072414226609140b674719ced3a4b86b147"
 
 # CPUs
 # Default: 4
@@ -31,44 +31,44 @@ memory: "2GiB"
 disk: "20GiB"
 
 mounts:
-  - location: "~"
-    writable: false
-  - location: "/tmp/lima"
-    writable: true
+- location: "~"
+  writable: false
+- location: "/tmp/lima"
+  writable: true
 
 containerd:
   system: false
   user: false
 
 provision:
-  # `system` is executed with the root privilege
-  - mode: system
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      command -v podman >/dev/null 2>&1 && exit 0
-      yum install -y podman
-      systemctl --system enable --now podman.socket
-  # `user` is executed without the root privilege
-  - mode: user
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      systemctl --user enable --now podman.socket
+# `system` is executed with the root privilege
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v podman >/dev/null 2>&1 && exit 0
+    yum install -y podman
+    systemctl --system enable --now podman.socket
+# `user` is executed without the root privilege
+- mode: user
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    systemctl --user enable --now podman.socket
 
 probes:
-  - script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      if ! timeout 30s bash -c "until command -v podman >/dev/null 2>&1; do sleep 3; done"; then
-        echo >&2 "podman is not installed yet"
-        exit 1
-      fi
-    hint: See "/var/log/cloud-init-output.log". in the guest
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v podman >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "podman is not installed yet"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest
 
 portForwards:
-  - guestSocket: "/run/user/{{.UID}}/podman/podman.sock"
-    hostSocket: "{{.Dir}}/sock/podman.sock"
+- guestSocket: "/run/user/{{.UID}}/podman/podman.sock"
+  hostSocket: "{{.Dir}}/sock/podman.sock"
 
 message: |
   To run `podman` on the host (assumes podman-remote is installed):

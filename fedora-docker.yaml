@@ -11,12 +11,12 @@ arch: "default"
 
 # An image must support systemd and cloud-init.
 images:
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
-    arch: "x86_64"
-    digest: "sha256:fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6"
-  - location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/aarch64/images/Fedora-Cloud-Base-35-1.2.aarch64.qcow2"
-    arch: "aarch64"
-    digest: "sha256:c71f2e6ce75b516d565e2c297ea9994c69b946cb3eaa0a4bbea400dbd6f59ae6"
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/x86_64/images/Fedora-Cloud-Base-35-1.2.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:fe84502779b3477284a8d4c86731f642ca10dd3984d2b5eccdf82630a9ca2de6"
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/35/Cloud/aarch64/images/Fedora-Cloud-Base-35-1.2.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:c71f2e6ce75b516d565e2c297ea9994c69b946cb3eaa0a4bbea400dbd6f59ae6"
 
 # CPUs
 # Default: 4
@@ -31,52 +31,52 @@ memory: "2GiB"
 disk: "20GiB"
 
 mounts:
-  - location: "~"
-    writable: false
-  - location: "/tmp/lima"
-    writable: true
+- location: "~"
+  writable: false
+- location: "/tmp/lima"
+  writable: true
 
 containerd:
   system: false
   user: false
 
 provision:
-  # `system` is executed with the root privilege
-  - mode: system
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      command -v docker >/dev/null 2>&1 && exit 0
-      dnf -y install -y dnf-plugins-core
-      dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
-      dnf install -y docker-ce docker-ce-cli containerd.io
-      systemctl --system enable --now docker
-  # `user` is executed without the root privilege
-  - mode: user
-    script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      dockerd-rootless-setuptool.sh install
-      docker context use rootless
-      systemctl --user enable --now docker
+# `system` is executed with the root privilege
+- mode: system
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    command -v docker >/dev/null 2>&1 && exit 0
+    dnf -y install -y dnf-plugins-core
+    dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo
+    dnf install -y docker-ce docker-ce-cli containerd.io
+    systemctl --system enable --now docker
+# `user` is executed without the root privilege
+- mode: user
+  script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    dockerd-rootless-setuptool.sh install
+    docker context use rootless
+    systemctl --user enable --now docker
 
 probes:
-  - script: |
-      #!/bin/bash
-      set -eux -o pipefail
-      if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
-        echo >&2 "docker is not installed yet"
-        exit 1
-      fi
-      if ! timeout 30s bash -c "until pgrep rootlesskit; do sleep 3; done"; then
-        echo >&2 "rootlesskit (used by rootless docker) is not running"
-        exit 1
-      fi
-    hint: See "/var/log/cloud-init-output.log". in the guest
+- script: |
+    #!/bin/bash
+    set -eux -o pipefail
+    if ! timeout 30s bash -c "until command -v docker >/dev/null 2>&1; do sleep 3; done"; then
+      echo >&2 "docker is not installed yet"
+      exit 1
+    fi
+    if ! timeout 30s bash -c "until pgrep rootlesskit; do sleep 3; done"; then
+      echo >&2 "rootlesskit (used by rootless docker) is not running"
+      exit 1
+    fi
+  hint: See "/var/log/cloud-init-output.log". in the guest
 
 portForwards:
-  - guestSocket: "/run/user/{{.UID}}/docker.sock"
-    hostSocket: "{{.Dir}}/sock/docker.sock"
+- guestSocket: "/run/user/{{.UID}}/docker.sock"
+  hostSocket: "{{.Dir}}/sock/docker.sock"
 
 message: |
   To run `docker` on the host (assumes docker-cli is installed):
